@@ -97,9 +97,13 @@ export const AddEditProductPage = () => {
         const match = cleanDate.match(pattern.regex);
         if (match) {
           if (pattern.format === 'MM/YYYY') {
-            // Assume end of month
-            return `${match[2]}-${match[1]}-28`;
+            // Assume last day of month for MM/YYYY format
+            const year = parseInt(match[2]);
+            const month = parseInt(match[1]);
+            const lastDay = new Date(year, month, 0).getDate();
+            return `${match[2]}-${match[1]}-${lastDay.toString().padStart(2, '0')}`;
           } else if (pattern.format === 'DD/MM/YYYY') {
+            // Note: Assumes European format DD/MM/YYYY. US users may need MM/DD/YYYY
             return `${match[3]}-${match[2]}-${match[1]}`;
           } else if (pattern.format === 'YYYY/MM/DD') {
             return `${match[1]}-${match[2]}-${match[3]}`;

@@ -33,7 +33,7 @@ export default defineConfig({
             src: 'pwa-512x512.png',
             sizes: '512x512',
             type: 'image/png',
-            purpose: 'any maskable'
+            purpose: 'any maskable' // Same icon used for maskable; create separate icon for better results
           }
         ]
       },
