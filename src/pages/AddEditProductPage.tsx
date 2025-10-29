@@ -83,30 +83,37 @@ export const AddEditProductPage = () => {
   const parseExpirationDate = (dateString: string): string => {
     // Try to parse common date formats and convert to YYYY-MM-DD
     try {
-      // Remove common prefixes
-      const cleanDate = dateString.replace(/EXP[:\s]*/gi, '').trim();
+      // Remove common prefixes (both English and German)
+      const cleanDate = dateString.replace(/(?:EXP|MHD)[:\s]*/gi, '').trim();
       
-      // Try parsing different formats
+      // Try parsing different formats (prioritizing German/European formats)
       const datePatterns = [
-        { regex: /(\d{2})[/.\\-](\d{2})[/.\\-](\d{4})/, format: 'DD/MM/YYYY' },
-        { regex: /(\d{2})[/.\\-](\d{4})/, format: 'MM/YYYY' },
+        // German standard format with dots
+        { regex: /(\d{2})\.(\d{2})\.(\d{4})/, format: 'DD.MM.YYYY' },
+        { regex: /(\d{2})\.(\d{4})/, format: 'MM.YYYY' },
+        
+        // European format with slashes or hyphens
+        { regex: /(\d{2})[/\\-](\d{2})[/\\-](\d{4})/, format: 'DD/MM/YYYY' },
+        { regex: /(\d{2})[/\\-](\d{4})/, format: 'MM/YYYY' },
+        
+        // ISO format
         { regex: /(\d{4})[/.\\-](\d{2})[/.\\-](\d{2})/, format: 'YYYY/MM/DD' },
       ];
 
       for (const pattern of datePatterns) {
         const match = cleanDate.match(pattern.regex);
         if (match) {
-          if (pattern.format === 'MM/YYYY') {
+          if (pattern.format === 'MM/YYYY' || pattern.format === 'MM.YYYY') {
             // Assume last day of month for MM/YYYY format
             const year = parseInt(match[2]);
             const month = parseInt(match[1]);
             const lastDay = new Date(year, month, 0).getDate();
-            return `${match[2]}-${match[1]}-${lastDay.toString().padStart(2, '0')}`;
-          } else if (pattern.format === 'DD/MM/YYYY') {
-            // Note: Assumes European format DD/MM/YYYY. US users may need MM/DD/YYYY
-            return `${match[3]}-${match[2]}-${match[1]}`;
+            return `${match[2]}-${match[1].padStart(2, '0')}-${lastDay.toString().padStart(2, '0')}`;
+          } else if (pattern.format === 'DD/MM/YYYY' || pattern.format === 'DD.MM.YYYY') {
+            // European/German format: DD.MM.YYYY or DD/MM/YYYY
+            return `${match[3]}-${match[2].padStart(2, '0')}-${match[1].padStart(2, '0')}`;
           } else if (pattern.format === 'YYYY/MM/DD') {
-            return `${match[1]}-${match[2]}-${match[3]}`;
+            return `${match[1]}-${match[2].padStart(2, '0')}-${match[3].padStart(2, '0')}`;
           }
         }
       }

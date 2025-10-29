@@ -11,7 +11,8 @@ export class OCRScanner {
 
   static async initialize(): Promise<void> {
     if (this.worker) return;
-    this.worker = await createWorker('eng');
+    // Initialize with both English and German language support for better European date recognition
+    this.worker = await createWorker(['eng', 'deu']);
   }
 
   static async scanImage(image: File | string): Promise<OCRResult> {
@@ -36,14 +37,30 @@ export class OCRScanner {
   private static extractDates(text: string): string[] {
     const dates: string[] = [];
     
-    // Common date patterns for expiration dates
+    // Common date patterns for expiration dates (European/German format focus)
     const patterns = [
-      /\d{2}[/.\\-]\d{2}[/.\\-]\d{4}/g, // DD/MM/YYYY or MM/DD/YYYY
-      /\d{2}[/.\\-]\d{4}/g, // MM/YYYY
-      /\d{4}[/.\\-]\d{2}[/.\\-]\d{2}/g, // YYYY/MM/DD
+      // German/European formats (DD.MM.YYYY is most common in Germany)
+      /\d{2}\.\d{2}\.\d{4}/g, // DD.MM.YYYY (German standard)
+      /\d{2}\.\d{4}/g, // MM.YYYY (German short format)
+      
+      // Also support slash and hyphen separators
+      /\d{2}[/.\\-]\d{2}[/.\\-]\d{4}/g, // DD/MM/YYYY or DD-MM-YYYY
+      /\d{2}[/.\\-]\d{4}/g, // MM/YYYY or MM-YYYY
+      
+      // ISO format
+      /\d{4}[/.\\-]\d{2}[/.\\-]\d{2}/g, // YYYY/MM/DD or YYYY-MM-DD
+      
+      // With "MHD" (Mindesthaltbarkeitsdatum - German for expiration date) or "EXP" prefix
+      /MHD[:\s]*\d{2}\.\d{2}\.\d{4}/gi, // MHD: DD.MM.YYYY
+      /MHD[:\s]*\d{2}\.\d{4}/gi, // MHD: MM.YYYY
       /EXP[:\s]*\d{2}[/.\\-]\d{2}[/.\\-]\d{4}/gi, // EXP: DD/MM/YYYY
       /EXP[:\s]*\d{2}[/.\\-]\d{4}/gi, // EXP: MM/YYYY
-      /\d{2}\s+(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)\s+\d{4}/gi, // DD MMM YYYY
+      
+      // German month names
+      /\d{2}[\s.]+(?:JAN|FEB|MÄR|APR|MAI|JUN|JUL|AUG|SEP|OKT|NOV|DEZ)[\s.]+\d{4}/gi, // DD MMM YYYY (German)
+      
+      // English month names (for international products)
+      /\d{2}\s+(?:JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)\s+\d{4}/gi, // DD MMM YYYY (English)
     ];
 
     patterns.forEach((pattern) => {
