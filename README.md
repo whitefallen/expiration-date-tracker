@@ -73,6 +73,55 @@ The production-ready files will be in the `dist` directory.
 npm run preview
 ```
 
+### Running Tests
+
+Run the test suite to validate CRUD functionality:
+
+```bash
+npm test
+```
+
+For watch mode during development:
+
+```bash
+npm run test:watch
+```
+
+## Deployment
+
+### GitHub Pages
+
+This project is configured for automatic deployment to GitHub Pages. The deployment workflow will:
+
+1. Run on every push to the `main` branch
+2. Build the project
+3. Deploy to GitHub Pages
+
+To enable GitHub Pages deployment:
+
+1. Go to your repository Settings
+2. Navigate to Pages section
+3. Under "Source", select "GitHub Actions"
+4. Push to the `main` branch to trigger deployment
+
+The app will be available at: `https://<username>.github.io/expiration-date-tracker/`
+
+### Manual Deployment
+
+You can also manually trigger deployment from the Actions tab in your repository.
+
+## CI/CD Pipeline
+
+The project includes automated workflows:
+
+- **Build and Test** (`.github/workflows/test.yml`): Runs on all pushes and pull requests
+  - Lints code
+  - Builds project
+  - Runs tests
+  - Validates build artifacts
+
+- **Deploy** (`.github/workflows/deploy.yml`): Deploys to GitHub Pages on main branch
+
 ## Usage
 
 ### Adding Products
