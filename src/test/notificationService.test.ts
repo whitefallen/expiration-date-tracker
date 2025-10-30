@@ -7,11 +7,14 @@ import {
 } from '../services/notificationService';
 
 // Mock the Notification API
-const mockNotification = vi.fn();
-const mockRequestPermission = vi.fn();
+let mockNotification: ReturnType<typeof vi.fn>;
+let mockRequestPermission: ReturnType<typeof vi.fn>;
 
 // Create a mock Notification constructor with mutable permission
 const createNotificationMock = (permission: NotificationPermission) => {
+  mockNotification = vi.fn();
+  mockRequestPermission = vi.fn();
+  
   const NotificationMock = mockNotification as unknown as typeof Notification;
   Object.defineProperty(NotificationMock, 'permission', {
     writable: true,
