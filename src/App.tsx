@@ -22,7 +22,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Router>
+      <Router basename={import.meta.env.BASE_URL}>
         <Layout>
           <Routes>
             <Route path="/" element={<HomePage />} />
