@@ -16,15 +16,15 @@ export const BarcodeScannerPage = () => {
   const [scanning, setScanning] = useState(false);
   const [scannedCode, setScannedCode] = useState('');
   const [error, setError] = useState('');
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const scannerRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
   const startScanning = async () => {
-    if (!videoRef.current) return;
+    if (!scannerRef.current) return;
 
     try {
       setError('');
-      await BarcodeScanner.initialize(videoRef.current, (result) => {
+      await BarcodeScanner.initialize(scannerRef.current, (result) => {
         setScannedCode(result.code);
         stopScanning();
       });
@@ -80,8 +80,8 @@ export const BarcodeScannerPage = () => {
             mb: 2,
           }}
         >
-          <video
-            ref={videoRef}
+          <div
+            ref={scannerRef}
             style={{
               width: '100%',
               maxWidth: '100%',
