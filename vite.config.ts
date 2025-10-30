@@ -17,8 +17,8 @@ export default defineConfig({
         theme_color: '#1976d2',
         background_color: '#ffffff',
         display: 'standalone',
-        scope: '/',
-        start_url: '/',
+        scope: process.env.NODE_ENV === 'production' ? '/expiration-date-tracker/' : '/',
+        start_url: process.env.NODE_ENV === 'production' ? '/expiration-date-tracker/' : '/',
         icons: [
           {
             src: 'pwa-192x192.png',
