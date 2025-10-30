@@ -11,6 +11,7 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
+import { NotificationCard } from '../components/NotificationCard';
 
 export const HomePage = () => {
   const navigate = useNavigate();
@@ -57,6 +58,11 @@ export const HomePage = () => {
       </Typography>
 
       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, justifyContent: 'center' }}>
+        {/* Notification Card */}
+        <Box sx={{ width: { xs: '100%', sm: 'calc(50% - 12px)', md: 'calc(25% - 18px)' }, minWidth: 250 }}>
+          <NotificationCard />
+        </Box>
+
         {features.map((feature, index) => (
           <Box key={index} sx={{ width: { xs: '100%', sm: 'calc(50% - 12px)', md: 'calc(25% - 18px)' }, minWidth: 250 }}>
             <Card
