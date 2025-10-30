@@ -7,7 +7,7 @@ describe('InstallPrompt', () => {
   let deferredPrompt: {
     preventDefault: () => void;
     prompt: () => Promise<void>;
-    userChoice: Promise<{ outcome: string }>;
+    userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
   };
 
   beforeEach(() => {
@@ -15,7 +15,7 @@ describe('InstallPrompt', () => {
     deferredPrompt = {
       preventDefault: vi.fn(),
       prompt: vi.fn().mockResolvedValue(undefined),
-      userChoice: Promise.resolve({ outcome: 'accepted' }),
+      userChoice: Promise.resolve({ outcome: 'accepted' as const }),
     };
   });
 
