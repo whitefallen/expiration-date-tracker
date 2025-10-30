@@ -8,6 +8,7 @@ import { AddEditProductPage } from './pages/AddEditProductPage';
 import { BarcodeScannerPage } from './pages/BarcodeScannerPage';
 import { ExpiryScannerPage } from './pages/ExpiryScannerPage';
 import { initializeNotificationService } from './services/notificationService';
+import { InstallPrompt } from './components/InstallPrompt';
 
 const theme = createTheme({
   palette: {
@@ -41,6 +42,7 @@ function App() {
             <Route path="/scan-expiry" element={<ExpiryScannerPage />} />
           </Routes>
         </Layout>
+        <InstallPrompt />
       </Router>
     </ThemeProvider>
   );

@@ -145,6 +145,29 @@ The project includes automated workflows:
 - Click the edit icon to modify product details
 - Click the delete icon to remove a product (with confirmation)
 
+### Installing as a PWA
+
+For the best experience, install this app on your device:
+
+**Desktop (Chrome/Edge):**
+1. Visit the app in your browser
+2. Look for the install prompt at the bottom of the page
+3. Click "Install" when prompted
+4. Or click the install icon in the address bar
+
+**Mobile (Chrome/Safari):**
+1. Visit the app in your mobile browser
+2. Look for the install prompt at the bottom of the page
+3. Click "Install" when prompted
+4. On iOS Safari: Tap the share button → "Add to Home Screen"
+
+**Benefits of installing:**
+- 📱 Quick access from your home screen
+- 🚀 Faster load times
+- 📵 Works offline
+- 🔔 Better notification support
+- 📷 Enhanced camera access for scanning
+
 ## Project Structure
 
 ```
