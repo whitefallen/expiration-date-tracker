@@ -1,11 +1,13 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider, createTheme, CssBaseline } from '@mui/material';
+import { useEffect } from 'react';
 import { Layout } from './components/Layout';
 import { HomePage } from './pages/HomePage';
 import { ProductsPage } from './pages/ProductsPage';
 import { AddEditProductPage } from './pages/AddEditProductPage';
 import { BarcodeScannerPage } from './pages/BarcodeScannerPage';
 import { ExpiryScannerPage } from './pages/ExpiryScannerPage';
+import { initializeNotificationService } from './services/notificationService';
 
 const theme = createTheme({
   palette: {
@@ -19,6 +21,12 @@ const theme = createTheme({
 });
 
 function App() {
+  useEffect(() => {
+    // Initialize notification service
+    const cleanup = initializeNotificationService();
+    return cleanup;
+  }, []);
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
