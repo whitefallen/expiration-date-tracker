@@ -10,11 +10,21 @@ import {
 const mockNotification = vi.fn();
 const mockRequestPermission = vi.fn();
 
+// Create a mock Notification constructor with mutable permission
+const createNotificationMock = (permission: NotificationPermission) => {
+  const NotificationMock = mockNotification as unknown as typeof Notification;
+  Object.defineProperty(NotificationMock, 'permission', {
+    writable: true,
+    configurable: true,
+    value: permission,
+  });
+  NotificationMock.requestPermission = mockRequestPermission;
+  return NotificationMock;
+};
+
 beforeEach(() => {
-  // Setup Notification mock
-  global.Notification = mockNotification as any;
-  global.Notification.permission = 'default';
-  global.Notification.requestPermission = mockRequestPermission;
+  // Setup Notification mock with default permission
+  global.Notification = createNotificationMock('default');
   
   // Clear localStorage
   localStorage.clear();
@@ -31,7 +41,7 @@ afterEach(() => {
 describe('Notification Service', () => {
   describe('requestNotificationPermission', () => {
     it('should return true if permission is already granted', async () => {
-      global.Notification.permission = 'granted';
+      global.Notification = createNotificationMock('granted');
       
       const result = await requestNotificationPermission();
       
@@ -40,7 +50,7 @@ describe('Notification Service', () => {
     });
 
     it('should request permission if not granted', async () => {
-      global.Notification.permission = 'default';
+      global.Notification = createNotificationMock('default');
       mockRequestPermission.mockResolvedValue('granted');
       
       const result = await requestNotificationPermission();
@@ -50,7 +60,7 @@ describe('Notification Service', () => {
     });
 
     it('should return false if permission is denied', async () => {
-      global.Notification.permission = 'denied';
+      global.Notification = createNotificationMock('denied');
       
       const result = await requestNotificationPermission();
       
@@ -59,7 +69,7 @@ describe('Notification Service', () => {
     });
 
     it('should return false if user denies permission', async () => {
-      global.Notification.permission = 'default';
+      global.Notification = createNotificationMock('default');
       mockRequestPermission.mockResolvedValue('denied');
       
       const result = await requestNotificationPermission();
@@ -71,7 +81,7 @@ describe('Notification Service', () => {
 
   describe('isNotificationEnabled', () => {
     it('should return true when Notification API exists and permission is granted', () => {
-      global.Notification.permission = 'granted';
+      global.Notification = createNotificationMock('granted');
       
       const result = isNotificationEnabled();
       
@@ -79,7 +89,7 @@ describe('Notification Service', () => {
     });
 
     it('should return false when permission is not granted', () => {
-      global.Notification.permission = 'default';
+      global.Notification = createNotificationMock('default');
       
       const result = isNotificationEnabled();
       
@@ -89,7 +99,7 @@ describe('Notification Service', () => {
 
   describe('checkAndNotifyExpiredProducts', () => {
     beforeEach(() => {
-      global.Notification.permission = 'granted';
+      global.Notification = createNotificationMock('granted');
       mockNotification.mockImplementation(function(title: string, options: NotificationOptions) {
         return {
           title,
@@ -101,7 +111,7 @@ describe('Notification Service', () => {
     });
 
     it('should not send notifications if permission is not granted', async () => {
-      global.Notification.permission = 'default';
+      global.Notification = createNotificationMock('default');
       
       const expiredProduct: Omit<Product, 'id'> = {
         name: 'Expired Product',
