@@ -7,7 +7,7 @@ export interface BarcodeResult {
 
 export class BarcodeScanner {
   static async initialize(
-    videoElement: HTMLVideoElement,
+    containerElement: HTMLElement,
     onDetected: (result: BarcodeResult) => void
   ): Promise<void> {
     return new Promise((resolve, reject) => {
@@ -16,7 +16,7 @@ export class BarcodeScanner {
           inputStream: {
             name: 'Live',
             type: 'LiveStream',
-            target: videoElement,
+            target: containerElement,
             constraints: {
               width: { min: 640 },
               height: { min: 480 },
