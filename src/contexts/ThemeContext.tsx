@@ -26,13 +26,21 @@ interface ThemeContextProviderProps {
 export const ThemeContextProvider = ({ children }: ThemeContextProviderProps) => {
   // Initialize theme from localStorage or default to 'light'
   const [mode, setMode] = useState<PaletteMode>(() => {
-    const savedMode = localStorage.getItem('themeMode');
-    return (savedMode === 'dark' || savedMode === 'light') ? savedMode : 'light';
+    try {
+      const savedMode = localStorage.getItem('themeMode');
+      return (savedMode === 'dark' || savedMode === 'light') ? savedMode : 'light';
+    } catch {
+      return 'light';
+    }
   });
 
   // Persist theme preference to localStorage
   useEffect(() => {
-    localStorage.setItem('themeMode', mode);
+    try {
+      localStorage.setItem('themeMode', mode);
+    } catch {
+      // Silently fail if localStorage is not available
+    }
   }, [mode]);
 
   const toggleTheme = () => {
