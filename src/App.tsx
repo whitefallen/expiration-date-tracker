@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { ThemeProvider, createTheme, CssBaseline } from '@mui/material';
 import { useEffect } from 'react';
+import { ThemeContextProvider } from './contexts/ThemeContext';
 import { Layout } from './components/Layout';
 import { HomePage } from './pages/HomePage';
 import { ProductsPage } from './pages/ProductsPage';
@@ -10,17 +10,6 @@ import { ExpiryScannerPage } from './pages/ExpiryScannerPage';
 import { initializeNotificationService } from './services/notificationService';
 import { InstallPrompt } from './components/InstallPrompt';
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#1976d2',
-    },
-    secondary: {
-      main: '#dc004e',
-    },
-  },
-});
-
 function App() {
   useEffect(() => {
     // Initialize notification service
@@ -29,8 +18,7 @@ function App() {
   }, []);
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
+    <ThemeContextProvider>
       <Router basename={import.meta.env.BASE_URL}>
         <Layout>
           <Routes>
@@ -44,7 +32,7 @@ function App() {
         </Layout>
         <InstallPrompt />
       </Router>
-    </ThemeProvider>
+    </ThemeContextProvider>
   );
 }
 

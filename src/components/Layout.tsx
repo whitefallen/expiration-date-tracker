@@ -17,8 +17,11 @@ import MenuIcon from '@mui/icons-material/Menu';
 import HomeIcon from '@mui/icons-material/Home';
 import AddIcon from '@mui/icons-material/Add';
 import ListAltIcon from '@mui/icons-material/ListAlt';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useThemeContext } from '../contexts/ThemeContext';
 
 interface LayoutProps {
   children: ReactNode;
@@ -27,6 +30,7 @@ interface LayoutProps {
 export const Layout = ({ children }: LayoutProps) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const navigate = useNavigate();
+  const { mode, toggleTheme } = useThemeContext();
 
   const menuItems = [
     { text: 'Home', icon: <HomeIcon />, path: '/' },
@@ -51,6 +55,13 @@ export const Layout = ({ children }: LayoutProps) => {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Expiration Date Tracker
           </Typography>
+          <IconButton
+            color="inherit"
+            onClick={toggleTheme}
+            aria-label="toggle dark mode"
+          >
+            {mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+          </IconButton>
         </Toolbar>
       </AppBar>
 
